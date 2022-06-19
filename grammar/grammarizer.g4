@@ -10,6 +10,6 @@ primitive: TK_LITERAL | GRAMMAR_RULE_NAME | LEXICAL_RULE_NAME;
 
 LEXICAL_RULE_NAME: [A-Z][A-Za-z_]*;
 GRAMMAR_RULE_NAME: [a-z][A-Za-z_]*;
+TK_LITERAL: '\'' .*? '\'';
 MULTIPLICITY_OP: '*' | '+' | '?';
-TK_LITERAL: '\'' .* '\'';
 WHITESPACE: [ \t\r\n]+ -> skip;
