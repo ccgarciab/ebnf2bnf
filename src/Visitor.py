@@ -5,7 +5,7 @@ from typing import Mapping, List, Tuple
 from gen.grammarizerParser import grammarizerParser as Parser
 from gen.grammarizerVisitor import grammarizerVisitor
 
-from Node import Node, BranchingNode, SequenceNode, ValueNode
+from .Node import Node, BranchingNode, SequenceNode, ValueNode
 
 
 class Visitor(grammarizerVisitor):
