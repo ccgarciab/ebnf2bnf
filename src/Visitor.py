@@ -1,6 +1,6 @@
 from collections import defaultdict
 from itertools import count
-from typing import List, Mapping, Tuple
+from typing import Iterable, List, Mapping, Tuple
 
 from gen.grammarizerParser import grammarizerParser as Parser
 from gen.grammarizerVisitor import grammarizerVisitor
@@ -9,8 +9,12 @@ from .Node import BranchingNode, Node, SequenceNode, ValueNode
 
 
 class Visitor(grammarizerVisitor):
-    rules_map: Mapping[str, List[Node]] = defaultdict(list)
-    counter = count()
+    rules_map: Mapping[str, List[Node]]
+    counter: Iterable[int]
+
+    def __init__(self):
+        self.rules_map = defaultdict(list)
+        self.counter = count()
 
     def visitGrammarFile(self, ctx: Parser.GrammarFileContext) -> Mapping[str, List[Node]]:
         for rule_ctx in ctx.rule_():

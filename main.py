@@ -10,7 +10,7 @@ from src.Visitor import Visitor
 api = Flask(__name__)
 
 
-@api.route('/', methods=['GET'])
+@api.route('/', methods=['POST'])
 def endpoint():
     input_str = request.get_json()
     logging.debug(f"input: {input_str}")
