@@ -13,22 +13,46 @@ class Visitor(grammarizerVisitor):
     counter = count()
 
     def visitGrammarFile(self, ctx: Parser.GrammarFileContext) -> Mapping[str, List[Node]]:
-        raise NotImplemented
+        for rule_ctx in ctx.rule_():
+            name, node = self.visitRule(rule_ctx)
+            self.rules_map[name].append(node)
+        return self.rules_map
 
     def visitRule(self, ctx: Parser.RuleContext) -> Tuple[str, Node]:
-        raise NotImplemented
+        node = self.visitBody(ctx.body())
+        return ctx.GRAMMAR_RULE_NAME().getText(), node
 
     def visitBody(self, ctx: Parser.BodyContext) -> BranchingNode:
-        raise NotImplemented
+        alternatives = [self.visitAlternative(c) for c in ctx.alternative()]
+        return BranchingNode(alternatives=alternatives)
 
     def visitAlternative(self, ctx: Parser.AlternativeContext) -> SequenceNode:
-        raise NotImplemented
+        sub_rules = [self.visitUnit(c) for c in ctx.unit()]
+        return SequenceNode(sub_rules=sub_rules)
 
     def visitUnit(self, ctx: Parser.UnitContext) -> Node:
-        raise NotImplemented
+        multiplied_node = (self.visitPrimitive(ctx.primitive())
+                           if ctx.primitive()
+                           else self.visitGrouping(ctx.grouping()))
+        if not ctx.MULTIPLICITY_OP():
+            return multiplied_node
+        multiplier = ctx.MULTIPLICITY_OP().getText()
+        if multiplier == '?':
+            alternatives = [multiplied_node, ValueNode(value='')]
+            return BranchingNode(alternatives=alternatives)
+        aux_rule_name = f"$aux_rule{next(self.counter)}"
+        aux_rule_node = ValueNode(value=aux_rule_name)
+        aux_rule_alternative = SequenceNode(sub_rules=[multiplied_node, aux_rule_node])
+        aux_rule_tree = BranchingNode(alternatives=[multiplied_node, aux_rule_alternative])
+        self.rules_map[aux_rule_name].append(aux_rule_tree)
+        if multiplier == '*':
+            return BranchingNode(alternatives=[aux_rule_node, ValueNode(value='')])
+        if multiplier == '+':
+            return aux_rule_node
+        raise ValueError(f"unhandled multiplier {multiplier}")
 
     def visitGrouping(self, ctx: Parser.GroupingContext) -> Node:
-        raise NotImplemented
+        return self.visitBody(ctx.body())
 
     def visitPrimitive(self, ctx: Parser.PrimitiveContext) -> ValueNode:
-        raise NotImplemented
+        return ValueNode(value=ctx.getText())
