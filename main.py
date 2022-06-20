@@ -6,9 +6,10 @@ from flask import Flask, request
 from gen.grammarizerLexer import grammarizerLexer
 from gen.grammarizerParser import grammarizerParser
 from src.Visitor import Visitor
+from flask_cors import CORS
 
 api = Flask(__name__)
-
+CORS(api)
 
 @api.route('/', methods=['POST'])
 def endpoint():
