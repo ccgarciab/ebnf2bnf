@@ -13,6 +13,10 @@ def main():
 
     visitor = Visitor()
     grammar_map = visitor.visitGrammarFile(tree)
+    for rule_name, nodes in grammar_map.items():
+        for node in nodes:
+            for rule in node.values():
+                print(f"{rule_name}: {rule or 'epsilon'};")
 
 
 if __name__ == '__main__':
