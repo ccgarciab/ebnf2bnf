@@ -1,11 +1,11 @@
 from collections import defaultdict
 from itertools import count
-from typing import Mapping, List, Tuple
+from typing import List, Mapping, Tuple
 
 from gen.grammarizerParser import grammarizerParser as Parser
 from gen.grammarizerVisitor import grammarizerVisitor
 
-from .Node import Node, BranchingNode, SequenceNode, ValueNode
+from .Node import BranchingNode, Node, SequenceNode, ValueNode
 
 
 class Visitor(grammarizerVisitor):

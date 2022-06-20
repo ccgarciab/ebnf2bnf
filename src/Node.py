@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from itertools import chain, product
-from typing import List, Iterable
+from typing import Iterable, List
 
 
 class Node:

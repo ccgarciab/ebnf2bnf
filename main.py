@@ -1,4 +1,5 @@
-from antlr4 import *
+from antlr4 import CommonTokenStream, FileStream
+
 from gen.grammarizerLexer import grammarizerLexer
 from gen.grammarizerParser import grammarizerParser
 from src.Visitor import Visitor
