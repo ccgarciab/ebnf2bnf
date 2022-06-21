@@ -9,7 +9,8 @@ Clone the repo, setup the python virtualenv and install dependencies. Then execu
 
 ```shell
 $ git clone https://github.com/ccgarciab/grammarizer
-$ python3 -m venv
+$ cd grammarizer
+$ python3 -m venv .venv
 $ source .venv/bin/activate # Script instead of bin in Windows
 $ pip install -r requirements.txt
 $ python main.py
