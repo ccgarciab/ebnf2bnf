@@ -1,4 +1,6 @@
 import logging
+import os
+import subprocess
 
 from antlr4 import CommonTokenStream, InputStream
 from flask import Flask, request
@@ -33,4 +35,9 @@ def endpoint():
 
 
 if __name__ == '__main__':
+    server = subprocess.Popen(['python', '-m', 'http.server', '8888'])
+    subprocess.Popen(['echo', 'use grammarizer at http://localhost:8888'], shell=True)
+    flask_logger = logging.getLogger('werkzeug')
+    flask_logger.setLevel(logging.ERROR)
     api.run()
+    server.terminate()
