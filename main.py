@@ -1,5 +1,4 @@
 import logging
-import os
 import subprocess
 
 from antlr4 import CommonTokenStream, InputStream
@@ -12,6 +11,7 @@ from flask_cors import CORS
 
 api = Flask(__name__)
 CORS(api)
+
 
 @api.route('/', methods=['POST'])
 def endpoint():
