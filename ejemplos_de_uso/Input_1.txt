@@ -1,0 +1,510 @@
+literal
+   : '-'? IntegerLiteral
+   | '-'? FloatingPointLiteral
+   | BooleanLiteral
+   | CharacterLiteral
+   | StringLiteral
+   | SymbolLiteral
+   | 'null'
+   ;
+
+qualId
+   : Id ('.' Id)*
+   ;
+
+ids
+   : Id (',' Id)*
+   ;
+
+stableId
+   : Id
+   | stableId '.' Id
+   | (Id '.')? ('this' | 'super' classQualifier? '.' Id)
+   ;
+
+classQualifier
+   : '[' Id ']'
+   ;
+
+type_
+   : functionArgTypes '=>' type_
+   | infixType existentialClause?
+   ;
+
+functionArgTypes
+   : infixType
+   | '(' (paramType (',' paramType)*)? ')'
+   ;
+
+existentialClause
+   : 'forSome' '{' existentialDcl+ '}'
+   ;
+
+existentialDcl
+   : 'type' typeDcl
+   | 'val' valDcl
+   ;
+
+infixType
+   : compoundType (Id compoundType)*
+   ;
+
+compoundType
+   : annotType ('with' annotType)* refinement?
+   | refinement
+   ;
+
+annotType
+   : simpleType annotation*
+   ;
+
+simpleType
+   : simpleType typeArgs
+   | simpleType '#' Id
+   | stableId ('.' 'type')?
+   | '(' types ')'
+   ;
+
+typeArgs
+   : '[' types ']'
+   ;
+
+types
+   : type_ (',' type_)*
+   ;
+
+refinement
+   : NL? '{' refineStat+ '}'
+   ;
+
+refineStat
+   : dcl
+   | 'type' typeDef
+   ;
+
+typePat
+   : type_
+   ;
+
+ascription
+   : ':' infixType
+   | ':' annotation +
+   | ':' '_' '*'
+   ;
+
+expr
+   : (bindings | 'implicit'? Id | '_') '=>' expr
+   | expr_one
+   ;
+
+expr_one
+   : 'if' '(' expr ')' NL* expr ('else' expr)?
+   | 'while' '(' expr ')' NL* expr
+   | 'try' expr ('catch' expr)? ('finally' expr)?
+   | 'do' expr 'while' '(' expr ')'
+   | 'for' ('(' enumerators ')' | '{' enumerators '}') 'yield'? expr
+   | 'throw' expr
+   | 'return' expr?
+   | ((simpleExpr | simpleexpr_one '_'?) '.')? Id '=' expr
+   | simpleexpr_one argumentExprs '=' expr
+   | postfixExpr ascription?
+   | postfixExpr 'match' '{' caseClauses '}'
+   ;
+
+prefixDef
+   : '-' | '+' | '~' | '!'
+   ;
+
+postfixExpr
+   : infixExpr Id? (prefixDef simpleexpr_one)* NL?
+   ;
+
+infixExpr
+   : prefixExpr
+   | infixExpr Id NL? infixExpr
+   ;
+
+prefixExpr
+   : prefixDef? (simpleExpr | simpleexpr_one '_'?)
+   ;
+
+simpleExpr
+   : 'new' (classTemplate | templateBody)
+   | blockExpr
+   ;
+
+simpleexpr_one
+   : literal
+   | stableId
+   | '_'
+   | '(' exprs? ')'
+   | simpleExpr '.' Id
+   | simpleexpr_one '_'?  '.' Id
+   | simpleExpr  typeArgs
+   | simpleexpr_one '_'? typeArgs
+   | simpleexpr_one argumentExprs
+   ;
+
+exprs
+   : expr (',' expr)*
+   ;
+
+argumentExprs
+    : '(' args ')'
+    | '{' args '}'
+    | NL? blockExpr
+    ;
+
+args
+    : exprs?
+    | (exprs ',')? postfixExpr (':' | '_' | '*') ?
+    ;
+
+blockExpr
+   : '{' caseClauses '}'
+   | '{' block '}'
+   ;
+
+block
+   : blockStat+ resultExpr?
+   ;
+
+blockStat
+   : import_
+   | annotation* ('implicit' | 'lazy')? def_
+   | annotation* localModifier* tmplDef
+   | expr_one
+   ;
+
+resultExpr
+   : expr_one
+   | (bindings | ('implicit'? Id | '_') ':' compoundType) '=>' block
+   ;
+
+enumerators
+   : generator+
+   ;
+
+generator
+   : pattern_one '<-' expr (guard_ | pattern_one '=' expr)*
+   ;
+
+caseClauses
+   : caseClause +
+   ;
+
+caseClause
+   : 'case' pattern guard_? '=>' block
+   ;
+
+guard_
+   : 'if' postfixExpr
+   ;
+
+pattern
+   : pattern_one ('|' pattern_one)*
+   ;
+
+pattern_one
+   : (BoundVarid| '_' | Id) ':' typePat
+   | pattern_two
+   ;
+
+pattern_two
+   : Id ('@' pattern_three)?
+   | pattern_three
+   ;
+
+pattern_three
+   : simplePattern
+   | simplePattern (Id NL? simplePattern)*
+   ;
+
+simplePattern
+   : '_'
+   | Varid
+   | literal
+   | stableId ('(' patterns? ')')?
+   | stableId '(' (patterns ',')? (Id '@')? '_' '*' ')'
+   | '(' patterns? ')'
+   ;
+
+patterns
+   : pattern (',' patterns)?
+   | '_' '*'
+   ;
+
+typeParamClause
+   : '[' variantTypeParam (',' variantTypeParam)* ']'
+   ;
+
+funTypeParamClause
+   : '[' typeParam (',' typeParam)* ']'
+   ;
+
+variantTypeParam
+   : annotation* ('+' | '-')? typeParam
+   ;
+
+typeParam
+   : (Id | '') typeParamClause? ('>:' type)? ('<:' type_)? ('<%' type_)* (':' type_)*
+   ;
+
+paramClauses
+   : paramClause* (NL? '(' 'implicit' params ')')?
+   ;
+
+paramClause
+   : NL? '(' params? ')'
+   ;
+
+params
+   : param (',' param)*
+   ;
+
+param
+   : annotation* Id (':' paramType)? ('=' expr)?
+   ;
+
+paramType
+   : type_
+   | '=>' type_
+   | type_ '*'
+   ;
+
+classParamClauses
+   : classParamClause* (NL? '(' 'implicit' classParams ')')?
+   ;
+
+classParamClause
+   : NL? '(' classParams? ')'
+   ;
+
+classParams
+   : classParam (',' classParam)*
+   ;
+
+classParam
+   : annotation* modifier* ('val' | 'var')? Id ':' paramType ('=' expr)?
+   ;
+
+bindings
+   : '(' binding (',' binding)* ')'
+   ;
+
+binding
+   : (Id | '') (':' type)?
+   ;
+
+modifier
+   : localModifier
+   | accessModifier
+   | 'override'
+   ;
+
+localModifier
+   : 'abstract'
+   | 'final'
+   | 'sealed'
+   | 'implicit'
+   | 'lazy'
+   ;
+
+accessModifier
+   : ('private' | 'protected') accessQualifier?
+   ;
+
+accessQualifier
+   : '[' (Id | 'this') ']'
+   ;
+
+annotation
+   : '@' simpleType argumentExprs*
+   ;
+
+constrAnnotation
+   : '@' simpleType argumentExprs
+   ;
+
+templateBody
+   : NL? '{' selfType? templateStat+ '}'
+   ;
+
+templateStat
+   : import_
+   | (annotation NL?)* modifier* def_
+   | (annotation NL?)* modifier* dcl
+   | expr
+   ;
+
+selfType
+   : Id (':' type_)? '=>'
+   | 'this' ':' type_ '=>'
+   ;
+
+import_
+   : 'import' importExpr (',' importExpr)*
+   ;
+
+importExpr
+   : stableId ('.' (Id | '_' | importSelectors))?
+   ;
+
+importSelectors
+   : '{' (importSelector ',')* (importSelector | '_') '}'
+   ;
+
+importSelector
+   : Id ('=>' (Id | '_'))?
+   ;
+
+dcl
+   : 'val' valDcl
+   | 'var' varDcl
+   | 'def' funDcl
+   | 'type' NL* typeDcl
+   ;
+
+valDcl
+   : ids ':' type_
+   ;
+
+varDcl
+   : ids ':' type_
+   ;
+
+funDcl
+   : funSig (':' type_)?
+   ;
+
+funSig
+   : Id funTypeParamClause? paramClauses
+   ;
+
+typeDcl
+   : Id typeParamClause? ('>:' type_)? ('<:' type_)?
+   ;
+
+patVarDef
+   : 'val' patDef
+   | 'var' varDef
+   ;
+
+def_
+   : patVarDef
+   | 'def' funDef
+   | 'type' NL* typeDef
+   | tmplDef
+   ;
+
+patDef
+   : pattern_two (',' pattern_two)* (':' type_)? '=' expr
+   ;
+
+varDef
+   : patDef
+   | ids ':' type_ '=' '_'
+   ;
+
+funDef
+   : funSig (':' type_)? '=' expr
+   | funSig NL? '{' block '}'
+   | 'this' paramClause paramClauses ('=' constrExpr | NL? constrBlock)
+   ;
+
+typeDef
+   : Id typeParamClause? '=' type_
+   ;
+
+tmplDef
+   : 'case'? 'class' classDef
+   | 'case'? 'object' objectDef
+   | 'trait' traitDef
+   ;
+
+classDef
+   : Id typeParamClause? constrAnnotation* accessModifier? classParamClauses classTemplateOpt
+   ;
+
+traitDef
+   : Id typeParamClause? traitTemplateOpt
+   ;
+
+objectDef
+   : Id classTemplateOpt
+   ;
+
+classTemplateOpt
+   : 'extends' classTemplate
+   | ('extends'? templateBody)?
+   ;
+
+traitTemplateOpt
+   : 'extends' traitTemplate
+   | ('extends'? templateBody)?
+   ;
+
+classTemplate
+   : earlyDefs? classParents templateBody?
+   ;
+
+traitTemplate
+   : earlyDefs? traitParents templateBody?
+   ;
+
+classParents
+   : constr ('with' annotType)*
+   ;
+
+traitParents
+   : annotType ('with' annotType)*
+   ;
+
+constr
+   : annotType argumentExprs*
+   ;
+
+earlyDefs
+   : '{' earlyDef+ '}' 'with'
+   ;
+
+earlyDef
+   : (annotation NL?)* modifier* patVarDef
+   ;
+
+constrExpr
+   : selfInvocation
+   | constrBlock
+   ;
+
+constrBlock
+   : '{' selfInvocation (blockStat)* '}'
+   ;
+
+selfInvocation
+   : 'this' argumentExprs +
+   ;
+
+topStatSeq
+   : topStat+
+   ;
+
+topStat
+   : (annotation NL?)* modifier* tmplDef
+   | import_
+   | packaging
+   | packageObject
+   ;
+
+packaging
+   : 'package' qualId  NL? '{' topStatSeq '}'
+   ;
+
+packageObject
+   : 'package' 'object' objectDef
+   ;
+
+
+compilationUnit
+   : ('package' qualId)* topStatSeq
+   ;

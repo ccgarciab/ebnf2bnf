@@ -1,0 +1,13 @@
+$aux_rule0: b;
+$aux_rule0: b $aux_rule0;
+$aux_rule1: c;
+$aux_rule1: c $aux_rule1;
+$aux_rule2: c;
+$aux_rule2: c $aux_rule2;
+x: a $aux_rule0 $aux_rule1 d;
+x: a $aux_rule0 $aux_rule1;
+x: a $aux_rule2 d;
+x: a $aux_rule2;
+x: a d;
+x: a;
+x: e;
