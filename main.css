@@ -1,0 +1,139 @@
+/* montserrat-200 - latin */
+@font-face {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 200;
+    src: url('assets/webfonts/montserrat-v25-latin-200.eot');
+    src: local(''),
+        url('assets/webfonts/montserrat-v25-latin-200.eot?#iefix') format('embedded-opentype'),
+        url('assets/webfonts/montserrat-v25-latin-200.woff2') format('woff2'),
+        url('assets/webfonts/montserrat-v25-latin-200.woff') format('woff'),
+        url('assets/webfonts/montserrat-v25-latin-200.ttf') format('truetype'),
+        url('assets/webfonts/montserrat-v25-latin-200.svg#Montserrat') format('svg');
+}
+
+#main-area {
+    display: grid;
+    grid-template-columns: 5vw 40vw 10vw 40vw 5vw;
+    grid-template-rows: 100vh;
+}
+
+header {
+    font-family: 'Montserrat', sans-serif;
+    font-size: large;
+    padding: 1vh 0 1vh 4vw;
+    margin: 0;
+    color: #161616;
+    box-shadow: 5px 2px 5px #9e868b;
+    background-color: #fff;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #f3f0ec;
+}
+
+#left-container {
+    grid-column: 2;
+}
+
+#right-container {
+    grid-column: 4;
+}
+
+#button-container {
+    grid-column: 3;
+    padding-top: 35vh;
+    width: 100%;
+}
+
+textarea {
+    width: 32vw;
+    height: 70%;
+    resize: none;
+    font-size: 1.2rem;
+    font-family: monospace;
+    line-height: 1.7rem;
+    border-style: solid;
+    border-width: 5px;
+    border-radius: 8px;
+    border-color: #383e45;
+    background-color: transparent;
+    color: transparent;
+    caret-color: #161616;
+    padding-top: 1.7rem;
+    padding-left: 1.2rem;
+    padding-right: 0;
+    padding-bottom: 0;
+    box-shadow: 0 3px 6px 0px rgb(0 0 0 / 50%);
+
+    position: absolute;
+    top: 30px;
+
+    white-space: pre;
+}
+
+textarea::selection {
+    background: #b3d4fc88;
+}
+
+textarea::-moz-selection {
+    background: #b3d4fc88;
+}
+
+button {
+    background-color: #e5322d;
+    font-weight: 600;
+    color: #fff;
+    border: transparent;
+    border-radius: 5px;
+    font-size: xx-large;
+    width: 70%;
+    box-shadow: 0 3px 6px 0px rgb(0 0 0 / 50%);
+    text-shadow: 1px 1px #c83732;
+    transition: background 0.2s ease-in-out;
+}
+
+button:hover {
+    background-color: #383e45;
+    text-shadow: 0px 0px 6px rgba(255, 255, 255, 0.7);
+}
+
+button:active {
+    box-shadow: 0 1px 1px 0px rgb(0 0 0 / 70%);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+#highlighting-input {
+    width: 30vw;
+    height: 89%;
+    top: 0;
+    left: 0;
+    padding-top: 1.7rem;
+    padding-left: 1.2rem;
+    font-size: 1.2rem;
+    font-family: monospace;
+    line-height: 1.7rem;
+    border-width: 0;
+}
+
+#highlighting-output {
+
+    width: 30vw;
+    height: 89%;
+    top: 0;
+    left: 0;
+    padding-top: 1.7rem;
+    padding-left: 1.2rem;
+    font-size: 1.2rem;
+    font-family: monospace;
+    line-height: 1.7rem;
+    border-width: 0;
+}

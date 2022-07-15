@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>EBNF 2 BNF</title>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <link rel="stylesheet" type='text/css' href="assets/css/prism.css" />
+    <script src='syntax_hl_utils.js'></script>
+</head>
+
+<body>
+
+    <script src="assets/js/prism.js"></script>
+
+    <header>
+        <h1>EBNF 2 BNF</h1>
+    </header>
+
+    <div id="main-area">
+
+        <div id="left-container" class="container textbox-container">
+
+            <pre id="input-pre" aria-hidden="true">
+                <code class="language-antlr4" id="highlighting-input"></code>
+            </pre>
+
+            <textarea id="input_area" spellcheck="false" oninput="sync_text(this, '#highlighting-input');"
+                onscroll="sync_scroll(this, '#input-pre');"></textarea>
+
+        </div>
+
+        <div id="button-container" class="container">
+            <button>→</button>
+        </div>
+
+        <div id="right-container" class="container textbox-container">
+
+            <pre id="output-pre" aria-hidden="true">
+                <code class="language-antlr4" id="highlighting-output"></code>
+            </pre>
+
+            <textarea id="output_area" spellcheck="false" readonly="true"
+                oninput="sync_text(this, '#highlighting-output');"
+                onscroll="sync_scroll(this, '#output-pre');"></textarea>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
