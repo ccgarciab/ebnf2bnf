@@ -12,6 +12,7 @@
     <script src="assets/js/prism.js"></script>
 
     <script src='assets/js/DomManipulation.js'></script>
+    <script src='assets/js/ebnf.js'></script>
 </head>
 
 <body>
@@ -34,7 +35,7 @@
         </div>
 
         <div id="button-container" class="container">
-            <button>→</button>
+            <button id="parse_button">→</button>
         </div>
 
         <div id="right-container" class="container textbox-container">
@@ -43,7 +44,7 @@
                     <code class="language-antlr4" id="highlighting-output"></code>
                 </pre>
 
-            <textarea id="output_area" spellcheck="false"></textarea>
+            <textarea id="output_area" spellcheck="false" readonly="true"></textarea>
 
         </div>
 
@@ -56,13 +57,14 @@
         let output_pre = document.querySelector('#output-pre');
         let hl_input = document.querySelector('#highlighting-input');
         let hl_output = document.querySelector('#highlighting-output');
+        let button = document.querySelector("#parse_button");
 
         // Event handlers added to keep the pre elements in sync with the textareas
         // The functions come from DomManipulation.js
         input_text.oninput = () => sync_text(input_text, hl_input);
-        output_text.oninput = () => sync_text(output_text, hl_output);
         input_text.onscroll = () => sync_scroll(input_text, input_pre);
         output_text.onscroll = () => sync_scroll(output_text, output_pre);
+        button.onclick = () => parse(input_text, output_text, hl_output);
     </script>
 
 </body>
