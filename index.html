@@ -7,6 +7,11 @@
     <meta name='viewport' content='width=device-width, initial-scale=1'>
 
     <link rel='stylesheet' type='text/css' media='screen' href='assets/css/style.css'>
+
+    <link rel="stylesheet" type='text/css' href="assets/css/prism.css" />
+    <script src="assets/js/prism.js"></script>
+
+    <script src='assets/js/DomManipulation.js'></script>
 </head>
 
 <body>
@@ -19,6 +24,11 @@
 
         <div id="left-container" class="container textbox-container">
 
+            <!-- the pre and texarea element are overlayed to give the illusion of being one element -->
+            <pre id="input-pre" aria-hidden="true">
+                    <code class="language-antlr4" id="highlighting-input"></code>
+                </pre>
+
             <textarea id="input_area" spellcheck="false"></textarea>
 
         </div>
@@ -29,11 +39,31 @@
 
         <div id="right-container" class="container textbox-container">
 
+            <pre id="output-pre" aria-hidden="true">
+                    <code class="language-antlr4" id="highlighting-output"></code>
+                </pre>
+
             <textarea id="output_area" spellcheck="false"></textarea>
 
         </div>
 
     </div>
+
+    <script>
+        let input_text = document.querySelector("#input_area");
+        let output_text = document.querySelector("#output_area");
+        let input_pre = document.querySelector('#input-pre');
+        let output_pre = document.querySelector('#output-pre');
+        let hl_input = document.querySelector('#highlighting-input');
+        let hl_output = document.querySelector('#highlighting-output');
+
+        // Event handlers added to keep the pre elements in sync with the textareas
+        // The functions come from DomManipulation.js
+        input_text.oninput = () => sync_text(input_text, hl_input);
+        output_text.oninput = () => sync_text(output_text, hl_output);
+        input_text.onscroll = () => sync_scroll(input_text, input_pre);
+        output_text.onscroll = () => sync_scroll(output_text, output_pre);
+    </script>
 
 </body>
 

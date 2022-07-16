@@ -58,6 +58,10 @@ body {
     width: 100%;
 }
 
+/*
+    textarea made transparent except for caret to allow displaying underlaying
+    pre + code elements, but retaining interactivity with textarea.
+*/
 textarea {
     position: absolute;
     top: 30px;
@@ -68,12 +72,12 @@ textarea {
     font-size: 1.2rem;
     line-height: 1.7rem;
     font-family: monospace;
-    color: #000;
+    color: transparent;
     caret-color: #161616;
 
     border: 5px solid #383e45;
     border-radius: 8px;
-    background-color: #fcf8f4;
+    background-color: transparent;
     box-shadow: 0 3px 6px 0px rgb(0 0 0 / 50%);
 
     white-space: pre;
@@ -112,4 +116,19 @@ button:hover {
 
 button:active {
     box-shadow: 0 1px 1px 0px rgb(0 0 0 / 70%);
+}
+
+#highlighting-output,
+#highlighting-input {
+
+    width: 30vw;
+    height: 89%;
+    top: 0;
+    left: 0;
+    padding-top: 1.7rem;
+    padding-left: 1.2rem;
+    font-size: 1.2rem;
+    font-family: monospace;
+    line-height: 1.7rem;
+    border-width: 0;
 }
