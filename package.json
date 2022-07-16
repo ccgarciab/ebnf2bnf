@@ -1,0 +1,36 @@
+{
+  "name": "ebnf2bnf",
+  "version": "0.2.0",
+  "description": "Translate extended bnf to plain bnf, for grammar design purposes.",
+  "scripts": {
+    "build": "webpack --mode=development",
+    "build-prod": "webpack --mode=production",
+    "generate": "antlr4 -visitor -no-listener -Dlanguage=JavaScript -o src/antlr_generated/ grammar/EBNF.g4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ccgarciab/ebnf2bnf.git"
+  },
+  "keywords": [
+    "EBNF",
+    "BNF",
+    "translator",
+    "ANTLR4"
+  ],
+  "author": "ccgarciab",
+  "bugs": {
+    "url": "https://github.com/ccgarciab/ebnf2bnf/issues"
+  },
+  "homepage": "https://github.com/ccgarciab/ebnf2bnf#readme",
+  "dependencies": {
+    "antlr4": "^4.10.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.6",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/preset-env": "^7.18.6",
+    "babel-loader": "^8.2.5",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0"
+  }
+}
