@@ -22,3 +22,17 @@ function sync_scroll(origin_element, target_element) {
     target_element.scrollTop = origin_element.scrollTop;
     target_element.scrollLeft = origin_element.scrollLeft;
 }
+
+function parse(origin_element, target_textarea, target_highlight) {
+    try {
+        let source = origin_element.value;
+        let result = EBNF.transform(source);
+        target_textarea.value = result;
+    }
+    catch (errorInfo) {
+        let { line, column, msg } = errorInfo;
+        alert(`Error at line ${line}, column ${column}: ${msg}`);
+        return;
+    }
+    sync_text(target_textarea, target_highlight);
+}
