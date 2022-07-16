@@ -1,7 +1,7 @@
-grammar grammarizer;
+grammar EBNF;
 
 grammarFile: rule* EOF;
-rule: name=GRAMMAR_RULE_NAME ':' body ';';
+rule: GRAMMAR_RULE_NAME ':' body ';';
 body: alternative ('|' alternative)*;
 alternative: unit+;
 unit: (grouping | primitive) MULTIPLICITY_OP?;
