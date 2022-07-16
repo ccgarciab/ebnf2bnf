@@ -1,26 +1,9 @@
-# Grammarizer
-A formal grammar manipulation tool
+# EBNF2BNF
+Translator from EBNF (extended Backus-Naur Form) to simple BNF, for grammar analysis and design purposes.
 
 ## Usage
 
-### Set up
-
-Clone the repo, setup the python virtualenv and install dependencies. Then execute `main.py` with python.
-
-```shell
-$ git clone https://github.com/ccgarciab/grammarizer
-$ cd grammarizer
-$ python3 -m venv .venv
-$ source .venv/bin/activate # Script instead of bin in Windows
-$ pip install -r requirements.txt
-$ python main.py
-```
-
-Then enter [`localhost:8888`](http://localhost:8888) in your browser.
-
-### Using the GUI
-
-![grammarizer gui preview](grammarizer_gui_preview.png)
+![grammarizer gui preview](ebnf2bnf_gui_preview.png)
 
 Once you've accessed the web page, you can enter your EBNF rules in the text box on the left. Rules generally follow the [ANTRL format](https://github.com/antlr/antlr4/blob/master/doc/parser-rules.md) for lexical rules. In simple terms, a rule has the form `rule_name: body;`.
 * the rule name starts with lowercase
@@ -32,36 +15,46 @@ Once you've accessed the web page, you can enter your EBNF rules in the text box
 
 After writing all your EBNF rules, click the `->` button in the middle, and get in the box on the right the equivalent BNF rules, which make no use of the special operators (`+`, `*`, `?`, `|`).
 
-## Development Setup
+## Development Set up
 
 ### Development dependencies
 
+* [Node/npm](https://nodejs.org/en/download/)
 * [Java](https://openjdk.org/install/)
 * The complete [ANTLR runtime](https://www.antlr.org/download.html)
 
-### ANTLR setup
+You only need Java and the ANTLR runtime to modify the grammar and generate a new recognizer from it. To build the website, or just modify the Visitor that carries out the translation, you only need npm.
 
-#### Option A: Use Intellij
+### ANTLR CLI aliasing
 
-* Download Intellij
-* Download the ANTLR4 plugin
-* In the grammar file, right click, configure ANTLR
-* Configure Python3 as output language
-
-#### Option B: configure the ANTLR CLI
+Use the following aliases, either directly in the terminal or in the respective `.rc` file. Remember to use the suitable path if you're not using `/usr/local/lib/` to host the runtime, as in the example.
 
 ```shell
-$ export CLASSPATH=".:/usr/local/lib/antlr-4.9.3-complete.jar:$CLASSPATH"
-$ alias antlr4='java -Xmx500M -cp "/usr/local/lib/antlr-4.9.3-complete.jar:$CLASSPATH" org.antlr.v4.Tool'
-$ alias grun='java -Xmx500M -cp "/usr/local/lib/antlr-4.9.3-complete.jar:$CLASSPATH" org.antlr.v4.gui.TestRig'
+$ export CLASSPATH=".:/usr/local/lib/antlr-4.10.1-complete.jar:$CLASSPATH"
+$ alias antlr4='java -Xmx500M -cp "/usr/local/lib/antlr-4.10.1-complete.jar:$CLASSPATH" org.antlr.v4.Tool'
 ```
 
-And now you can use ANTLR as
+And now you can use generate the recognizer files with the provided npm script, from the root of the project.
 
 ```shell
-$ antlr4 -Dlanguage=Python3 grammar/grammarizer.g4
+$ npm run generate
 ```
 
-### Final steps
+### Installing deps and Building
 
-Follow the usage set up instructions, and hack away.
+Clone the repo and install the javascript dependencies with npm. This includes the ANTLR JS target (different to the runtime) and dev dependencies to bundle the recognizer + Visitor code.
+
+```shell
+$ git clone https://github.com/ccgarciab/ebnf2bnf
+$ cd ebnf2bnf
+$ npm install
+```
+
+Then build the repo using the provided npm scripts. Use `build` for a development build and `build-prod` for production.
+
+```shell
+$ npm run build
+$ npm run build-prod
+```
+
+Then enter the file location in your browser, or use a web server of your preference.
